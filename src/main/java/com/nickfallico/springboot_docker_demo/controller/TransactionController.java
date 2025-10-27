@@ -15,13 +15,25 @@ public class TransactionController {
     public TransactionController(TransactionRepository repo) { this.repo = repo; }
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody Transaction t) {
-        if (t.getAmount() > 10000) {
-            return ResponseEntity.badRequest().body("Amount exceeds fraud threshold (10000)");
+    public Transaction create(@RequestBody Transaction t) {
+        // rule 1: reject single tx > $10,000
+        if (t.getAmount() != null && t.getAmount() > 10000) {
+            throw new IllegalArgumentException("Single transaction exceeds limit of 10,000");
         }
-        return ResponseEntity.ok(repo.save(t));
+
+        // rule 2: reject if daily total > $20,000
+        double dailyTotal = repo.getUserDailyTotal(t.getUserId());
+        if (dailyTotal + t.getAmount() > 20000) {
+            throw new IllegalArgumentException("Daily limit of 20,000 exceeded");
+        }
+
+        return repo.save(t);
     }
 
+    @GetMapping("/daily-total/{userId}")
+    public double getUserDailyTotal(@PathVariable String userId) {
+        return repo.getUserDailyTotal(userId);
+    }
 
     @GetMapping("/{id}")
     public Transaction get(@PathVariable Long id) {
