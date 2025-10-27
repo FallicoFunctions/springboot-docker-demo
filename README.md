@@ -10,7 +10,7 @@ A simple Spring Boot REST service for transactions, containerized with Docker an
 - Maven
 
 ## Run locally (Docker)
-1. `docker-compose up --build`
+1. docker-compose up --build
 2. API: POST http://localhost:8080/api/transactions
    Example:
    `curl -X POST localhost:8080/api/transactions -H "Content-Type: application/json" -d '{"userId":"u1","amount":100,"currency":"USD"}'`
