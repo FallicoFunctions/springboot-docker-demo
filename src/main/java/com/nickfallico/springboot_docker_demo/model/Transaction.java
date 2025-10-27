@@ -1,16 +1,32 @@
 package com.nickfallico.springboot_docker_demo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.time.Instant;
 
 @Entity
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
+
+    @Schema(example = "u12345")
+    @NotBlank
     private String userId;
+
+    @Schema(example = "100.00")
+    @NotNull
+    @Min(1)
     private Double amount;
+
+    @Schema(example = "USD")
+    @NotBlank
     private String currency;
+
     private Instant createdAt = Instant.now();
 
     // getters and setters
@@ -22,6 +38,7 @@ public class Transaction {
         this.id = id;
     }
 
+    @NotBlank
     public String getUserId() {
         return userId;
     }
@@ -34,6 +51,8 @@ public class Transaction {
         return amount;
     }
 
+    @NotNull
+    @Min(1)
     public void setAmount(Double amount) {
         this.amount = amount;
     }
@@ -42,6 +61,7 @@ public class Transaction {
         return currency;
     }
 
+    @NotBlank
     public void setCurrency(String currency) {
         this.currency = currency;
     }
