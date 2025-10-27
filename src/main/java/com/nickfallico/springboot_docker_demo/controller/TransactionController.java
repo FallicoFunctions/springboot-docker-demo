@@ -4,6 +4,8 @@ import com.nickfallico.springboot_docker_demo.model.Transaction;
 import com.nickfallico.springboot_docker_demo.repository.TransactionRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/transactions")
 public class TransactionController {
@@ -22,5 +24,10 @@ public class TransactionController {
     @GetMapping("/{id}")
     public Transaction get(@PathVariable Long id) {
         return repo.findById(id).orElseThrow();
+    }
+
+    @GetMapping
+    public List<Transaction> getAll() {
+        return repo.findAll();
     }
 }
