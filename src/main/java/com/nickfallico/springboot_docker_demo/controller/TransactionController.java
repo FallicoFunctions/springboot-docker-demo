@@ -2,6 +2,8 @@ package com.nickfallico.springboot_docker_demo.controller;
 
 import com.nickfallico.springboot_docker_demo.model.Transaction;
 import com.nickfallico.springboot_docker_demo.repository.TransactionRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +32,8 @@ public class TransactionController {
         return repo.save(t);
     }
 
+    @Operation(summary = "Get user's daily transaction total")
+    @ApiResponse(responseCode = "200", description = "Daily total amount")
     @GetMapping("/daily-total/{userId}")
     public double getUserDailyTotal(@PathVariable String userId) {
         return repo.getUserDailyTotal(userId);
