@@ -2,9 +2,9 @@ package com.nickfallico.springboot_docker_demo.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
@@ -14,27 +14,28 @@ import java.time.Instant;
         }
 )
 public class Transaction {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
     @Schema(example = "u12345")
-    @NotBlank
+    @NotBlank(message = "User ID must not be blank")
     private String userId;
 
     @Schema(example = "100.00")
-    @NotNull
-    @Min(1)
-    private Double amount;
+    @NotNull(message = "Amount must not be null")
+    @DecimalMin(value = "0.01", inclusive = true, message = "Amount must be at least 0.01")
+    private BigDecimal amount;
 
     @Schema(example = "USD")
-    @NotBlank
+    @NotBlank(message = "Currency must not be blank")
     private String currency;
 
     private Instant createdAt = Instant.now();
 
-    // getters and setters
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -43,7 +44,6 @@ public class Transaction {
         this.id = id;
     }
 
-    @NotBlank
     public String getUserId() {
         return userId;
     }
@@ -52,13 +52,11 @@ public class Transaction {
         this.userId = userId;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    @NotNull
-    @Min(1)
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -66,7 +64,6 @@ public class Transaction {
         return currency;
     }
 
-    @NotBlank
     public void setCurrency(String currency) {
         this.currency = currency;
     }
