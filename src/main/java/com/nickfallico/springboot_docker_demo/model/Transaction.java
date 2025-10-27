@@ -8,6 +8,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;
 
 @Entity
+@Table(
+        indexes = {
+                @Index(name = "idx_userid_createdat", columnList = "userId, createdAt")
+        }
+)
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
